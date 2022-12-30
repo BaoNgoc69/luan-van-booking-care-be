@@ -12,6 +12,7 @@ module.exports = {
             // patientId: DataTypes.INTEGER,
             // doctorId: DataTypes.INTEGER,
             // description: DataTypes.TEXT,
+            //files: DataTypes.TEXT,
             patientId: {
                 type: Sequelize.STRING
             },
@@ -19,6 +20,9 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             description: {
+                type: Sequelize.TEXT
+            },
+            files: {
                 type: Sequelize.TEXT
             },
 
