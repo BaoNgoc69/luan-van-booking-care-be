@@ -11,7 +11,7 @@ let handleUserLogin = (email, password) => {
 
             let isExist = await checkUserEmail(email);
             if (isExist) {
-                let user = await db.user_info.findOne({
+                let user = await db.users.findOne({
                     attributes: ['email', 'roleId', 'password', 'firstName', 'lastName'],
                     where: { email: email },
                     raw: true
@@ -51,7 +51,7 @@ let handleUserLogin = (email, password) => {
 let checkUserEmail = (userEmail) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.user_info.findOne({
+            let user = await db.users.findOne({
                 where: { email: userEmail }
             })
             if (user) {
@@ -71,13 +71,13 @@ let getAllUsers = (userId) => {
             let users = '';
 
             if (userId === 'ALL') {
-                users = await db.user_info.findAll({
+                users = await db.users.findAll({
                     attributes: {
                         exclude: ['password']
                     }
                 })
             } if (userId && userId !== 'ALL') {
-                users = await db.user_info.findOne({
+                users = await db.users.findOne({
 
                     where: { id: userId },
                     attributes: {
@@ -116,15 +116,17 @@ let createNewUsers = (data) => {
 
             } else {
                 let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-                await db.user_info.create({
+                await db.users.create({
                     email: data.email,
                     password: hashPasswordFromBcrypt,
                     firstName: data.firstName,
                     lastName: data.lastName,
                     address: data.address,
-                    phonenumber: data.phone,
-                    gender: data.gender === '1' ? true : false,
-                    roleId: data.roleid,
+                    phonenumber: data.phonenumber,
+                    gender: data.gender,
+                    roleId: data.roleId,
+                    positionId: data.positionId
+
 
                 })
             }
@@ -140,7 +142,7 @@ let createNewUsers = (data) => {
 
 let deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
-        let foundUser = await db.user_info.findOne({
+        let foundUser = await db.users.findOne({
             where: { id: userId }
         })
         if (!foundUser) {
@@ -152,7 +154,7 @@ let deleteUser = (userId) => {
         // if (foundUser) {
         //     await foundUser.destroy();
         // }
-        await db.user_info.destroy({
+        await db.users.destroy({
             where: { id: userId }
         })
         resolve({
@@ -171,7 +173,7 @@ let updataUserData = (data) => {
                     message: 'Missing required parameter'
                 })
             }
-            let user = await db.user_info.findOne({
+            let user = await db.users.findOne({
                 where: { id: data.id },
                 raw: false
             })
@@ -180,7 +182,7 @@ let updataUserData = (data) => {
                 user.lastName = data.lastName;
                 user.address = data.address;
                 await user.save();
-                // await db.user_info.save({
+                // await db.users.save({
                 //     firstName: data.firstName,
                 //     lastName: data.lastName,
                 //     address: data.address,

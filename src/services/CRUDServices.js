@@ -5,7 +5,7 @@ let createNewUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-            await db.user_info.create({
+            await db.users.create({
                 email: data.email,
                 password: hashPasswordFromBcrypt,
                 firstName: data.firstName,
@@ -36,7 +36,7 @@ let hashUserPassword = (password) => {
 let getUserInfoById = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.user_info.findOne({
+            let user = await db.users.findOne({
                 where: { id: userId },
                 raw: true,
 
@@ -57,7 +57,7 @@ let getUserInfoById = (userId) => {
 let getAllUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let users = db.user_info.findAll({
+            let users = db.users.findAll({
                 raw: true,
             });
             resolve(users)
@@ -69,7 +69,7 @@ let getAllUser = () => {
 let updataUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.user_info.findOne({
+            let user = await db.users.findOne({
                 where: { id: data.id }
             })
             if (user) {
@@ -77,7 +77,7 @@ let updataUserData = (data) => {
                 user.lastName = data.lastName;
                 user.address = data.address;
                 await user.save();
-                let allUsers = await db.user_info.findAll();
+                let allUsers = await db.users.findAll();
 
                 resolve(allUsers);
             }
@@ -95,7 +95,7 @@ let updataUserData = (data) => {
 let deleteUserById = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.user_info.findOne({
+            let user = await db.users.findOne({
                 where: { id: userId }
             })
             if (user) {

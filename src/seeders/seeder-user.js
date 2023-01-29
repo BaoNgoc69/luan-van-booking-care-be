@@ -9,7 +9,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('user_info', [{
+    return queryInterface.bulkInsert('users', [{
       email: 'baon57674@gmail.com',
       password: '12345',
       firstName: 'Bao',
@@ -24,6 +24,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('user_info', null, {});
+    return queryInterface.bulkDelete('users', null, {});
   }
 };
