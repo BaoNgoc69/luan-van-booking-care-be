@@ -162,7 +162,24 @@ let getDetailDoctorById = (inputId) => {
                             model: db.Markdown,
                             attributes: ['description', 'contentHTML', 'contentMarkdown']
                         },
+
                         { model: db.allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+
+                        {
+                            model: db.Doctor_info,
+                            attributes: {
+                                exclude: ['id', 'doctorId']
+                            },
+                            include: [
+                                { model: db.allcode, as: 'priceTypeData', attributes: ['valueEn', 'valueVi'] },
+                                { model: db.allcode, as: 'provinceTypeData', attributes: ['valueEn', 'valueVi'] },
+                                { model: db.allcode, as: 'paymentTypeData', attributes: ['valueEn', 'valueVi'] },
+
+
+                            ]
+
+
+                        },
 
 
                     ],
