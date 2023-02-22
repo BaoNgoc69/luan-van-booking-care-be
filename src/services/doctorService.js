@@ -1,6 +1,7 @@
 import db from "../models/index";
 require('dotenv').config();
 import _, { reject } from 'lodash';
+import { resolve } from "path";
 
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
@@ -58,9 +59,7 @@ let saveDetailInforDoctor = (inputData) => {
     return new Promise(async (resolve, reject) => {
         try {
 
-            if (!inputData.doctorId || !inputData.contentHTML ||
-
-                !inputData.contentMarkdown || !inputData.action ||
+            if (!inputData.doctorId || !inputData.contentHTML || !inputData.contentMarkdown || !inputData.action ||
                 !inputData.selectedPrice || !inputData.selectedPayment ||
                 !inputData.selectedProvince ||
                 !inputData.nameClinic || !inputData.addressClinic ||
@@ -106,7 +105,7 @@ let saveDetailInforDoctor = (inputData) => {
                     }, raw: false
                 })
                 if (doctorInfor) {
-                    doctorId.doctorId = inputData.doctorId
+                    doctorInfor.doctorId = inputData.doctorId
                     doctorInfor.priceId = inputData.selectedPrice;
                     doctorInfor.provinceId = inputData.selectedProvince;
                     doctorInfor.paymentId = inputData.selectedPayment;
@@ -288,11 +287,54 @@ let getScheduleByDate = (doctorId, date) => {
 
 }
 
+
+let getExtraInforDoctorById = (idInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!idInput) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!!!'
+
+                })
+            } else {
+                let data = await db.Doctor_info.findOne({
+                    where: {
+                        doctorId: idInput
+                    },
+                    attributes: {
+                        exclude: ['id', 'doctorId']
+                    },
+                    include: [
+                        { model: db.allcode, as: 'priceTypeData', attributes: ['valueEn', 'valueVi'] },
+                        { model: db.allcode, as: 'provinceTypeData', attributes: ['valueEn', 'valueVi'] },
+                        { model: db.allcode, as: 'paymentTypeData', attributes: ['valueEn', 'valueVi'] },
+
+
+                    ],
+                    raw: false,
+                    nest: true
+                })
+                if (!data) data = {};
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     saveDetailInforDoctor: saveDetailInforDoctor,
     getDetailDoctorById: getDetailDoctorById,
     bulkCreateSchedule: bulkCreateSchedule,
-    getScheduleByDate: getScheduleByDate
+    getScheduleByDate: getScheduleByDate,
+    getExtraInforDoctorById: getExtraInforDoctorById
 }
