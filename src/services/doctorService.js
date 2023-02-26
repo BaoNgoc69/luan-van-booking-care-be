@@ -268,6 +268,9 @@ let getScheduleByDate = (doctorId, date) => {
 
                         { model: db.allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },
 
+                        { model: db.users, as: 'doctorData', attributes: ['firstName', 'lastName'] },
+
+
 
                     ],
                     raw: false,
