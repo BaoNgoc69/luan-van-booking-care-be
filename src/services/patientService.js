@@ -1,5 +1,6 @@
 import db from "../models/index";
 require('dotenv').config();
+import emailService from "./emailService";
 
 
 
@@ -14,6 +15,19 @@ let postBookAppoinment = (data) => {
                 })
             }
             else {
+
+                await emailService.sendSimpleEmail({
+                    reciverEmail: data.email,
+                    patientName: "Bảo Ngọc",
+                    time: "8:00 - 9:00 Chủ nhật 26/2/2023",
+                    doctorName: "Bảo Xuyên",
+                    redirectLink: "https://www.youtube.com/watch?v=0GL--Adfqhc&list=PLncHg6Kn2JT6E38Z3kit9Hnif1xC_9VqI&index=97&ab_channel=H%E1%BB%8FiD%C3%A2nIT"
+
+
+                })
+
+
+
                 //update patient
                 let user = await db.users.findOrCreate({
                     where: { email: data.email },
