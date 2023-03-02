@@ -17,9 +17,18 @@ module.exports = {
             // nameClinic: DataTypes.STRING,
             // note: DataTypes.STRING,
             // count: DataTypes.INTEGER,
+            // specialtyId: DataTypes.INTEGER,
+            // clinicId: DataTypes.INTEGER,
             doctorId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
+            },
+            specialtyId: {
+                type: Sequelize.INTEGER,
+
+            },
+            clinicId: {
+                type: Sequelize.INTEGER,
             },
             priceId: {
                 type: Sequelize.STRING,
