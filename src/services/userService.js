@@ -193,6 +193,43 @@ const getDetailUser = (id) => {
   });
 };
 
+const getBookingHistory = (patientId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.tests.findAll({
+        include: [
+          {
+            model: db.users,
+            as: "doctor",
+            attributes: ["email", "firstName", "address", "gender", "lastName"],
+          },
+        ],
+        raw: false,
+        where: { patientId: patientId },
+      });
+      if (data) {
+        // await db.users.save({
+        //     firstName: data.firstName,
+        //     lastName: data.lastName,
+        //     address: data.address,
+        // })
+        resolve({
+          data,
+          errCode: 0,
+          message: "true",
+        });
+      } else {
+        resolve({
+          errCode: 404,
+          message: "Not found",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let updataUserData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -256,4 +293,5 @@ module.exports = {
   updataUserData: updataUserData,
   getAllCodeService: getAllCodeService,
   getDetailUser: getDetailUser,
+  getBookingHistory: getBookingHistory,
 };

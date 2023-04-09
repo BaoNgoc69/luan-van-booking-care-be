@@ -58,6 +58,13 @@ let handleCreateNewUsers = async (req, res) => {
   return res.status(200).json(message);
 };
 
+const getBookingHistory = async (req, res) => {
+  const patientId = req.params.id;
+  let data = await userService.getBookingHistory(patientId);
+
+  return res.status(200).json(data);
+};
+
 let handleEditUsers = async (req, res) => {
   let data = req.body;
   let message = await userService.updataUserData(data);
@@ -96,4 +103,5 @@ module.exports = {
   handleDeleteUsers: handleDeleteUsers,
   getAllCode: getAllCode,
   handleGetDetailUser: handleGetDetailUser,
+  getBookingHistory: getBookingHistory,
 };

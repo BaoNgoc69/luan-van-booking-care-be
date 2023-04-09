@@ -44,8 +44,11 @@ let postBookAppoinment = (data) => {
             where: {
               timeType: data.timeType,
               doctorId: data.doctorId,
+              date: data.date,
             },
           });
+
+          console.log(booking);
 
           if (booking && booking["id"]) {
             resolve({
@@ -53,30 +56,29 @@ let postBookAppoinment = (data) => {
               errCode: -1,
               errMessage: "This time is already picked",
             });
-          }
-          else {
+          } else {
             let token = uuidv4();
-          await emailService.sendSimpleEmail({
-            reciverEmail: data.email,
-            patientName: data.fullName,
-            time: data.timeString,
-            doctorName: data.doctorName,
-            language: data.language,
-            redirectLink: `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${data.doctorId}`,
-          });
+            await emailService.sendSimpleEmail({
+              reciverEmail: data.email,
+              patientName: data.fullName,
+              time: data.timeString,
+              doctorName: data.doctorName,
+              language: data.language,
+              redirectLink: `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${data.doctorId}`,
+            });
 
-          // update patient
-        //   let user = await db.users.findOrCreate({
-        //     where: { email: data.email },
-        //     defaults: {
-        //       email: data.email,
-        //       roleId: "R3",
-        //       gender: data.selectedGender,
-        //       address: data.address,
-        //       firstName: data.fullName,
-        //     },
-        //   });
-          // create a booking record
+            // update patient
+            //   let user = await db.users.findOrCreate({
+            //     where: { email: data.email },
+            //     defaults: {
+            //       email: data.email,
+            //       roleId: "R3",
+            //       gender: data.selectedGender,
+            //       address: data.address,
+            //       firstName: data.fullName,
+            //     },
+            //   });
+            // create a booking record
 
             await db.booking.findOrCreate({
               where: {
@@ -91,57 +93,56 @@ let postBookAppoinment = (data) => {
                 token: token,
               },
             });
-          
 
+            resolve({
+              data: user,
+              errCode: 0,
+              errMessage: "Save info patient succeed!",
+            });
+          }
+        } else {
           resolve({
             data: user,
             errCode: 0,
             errMessage: "Save info patient succeed!",
           });
-          }
-        } else {
-            resolve({
-                data: user,
-                errCode: 0,
-                errMessage: "Save info patient succeed!",
-              });
-        //   let token = uuidv4();
-        //   await emailService.sendSimpleEmail({
-        //     reciverEmail: data.email,
-        //     patientName: data.fullName,
-        //     time: data.timeString,
-        //     doctorName: data.doctorName,
-        //     language: data.language,
-        //     redirectLink: `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${data.doctorId}`,
-        //   });
+          //   let token = uuidv4();
+          //   await emailService.sendSimpleEmail({
+          //     reciverEmail: data.email,
+          //     patientName: data.fullName,
+          //     time: data.timeString,
+          //     doctorName: data.doctorName,
+          //     language: data.language,
+          //     redirectLink: `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${data.doctorId}`,
+          //   });
 
           // update patient
-        //   let user = await db.users.findOrCreate({
-        //     where: { email: data.email },
-        //     defaults: {
-        //       email: data.email,
-        //       roleId: "R3",
-        //       gender: data.selectedGender,
-        //       address: data.address,
-        //       firstName: data.fullName,
-        //     },
-        //   });
+          //   let user = await db.users.findOrCreate({
+          //     where: { email: data.email },
+          //     defaults: {
+          //       email: data.email,
+          //       roleId: "R3",
+          //       gender: data.selectedGender,
+          //       address: data.address,
+          //       firstName: data.fullName,
+          //     },
+          //   });
           // create a booking record
-        //   if (user && user[0]) {
-        //     await db.booking.findOrCreate({
-        //       where: {
-        //         patientId: null,
-        //       },
-        //       defaults: {
-        //         statusId: "S1",
-        //         doctorId: data.doctorId,
-        //         patientId: user[0].id,
-        //         date: data.date,
-        //         timeType: data.timeType,
-        //         token: token,
-        //       },
-        //     });
-        //   }
+          //   if (user && user[0]) {
+          //     await db.booking.findOrCreate({
+          //       where: {
+          //         patientId: null,
+          //       },
+          //       defaults: {
+          //         statusId: "S1",
+          //         doctorId: data.doctorId,
+          //         patientId: user[0].id,
+          //         date: data.date,
+          //         timeType: data.timeType,
+          //         token: token,
+          //       },
+          //     });
+          //   }
 
           resolve({
             data: user,
