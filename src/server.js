@@ -10,11 +10,16 @@ let app = express();
 let whitelist = ["http://localhost:3001"];
 let corsOptions = {
   origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
+    if (true) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
+    // if (whitelist.indexOf(origin) !== -1) {
+    //   callback(null, true);
+    // } else {
+    //   callback(new Error("Not allowed by CORS"));
+    // }
   },
   credentials: true,
 };
